@@ -37,6 +37,7 @@
 // with `@todo upstream-uml` annotations on each affected declaration.
 import type {
   IClass,
+  IComment,
   IDataType,
   IPackage,
   IProperty,
@@ -750,6 +751,397 @@ export interface IServiceProperty extends IProperty {
  */
 export interface IServiceChannel {
   readonly baseConnectorId: string;
+}
+
+// ─── Cluster 3 — Participants / Agent / ServicesArchitecture / Collaboration / Port / Milestone ─
+// Population:
+//  22. IParticipant                   (§6.4.10)  stereotype, extends UML::Class
+//  23. IAgent                         (§6.4.1)   stereotype, generalizes IParticipant (chained Generalization
+//                                               captured in the SoaML metamodel; the §6.4.1 spec text states
+//                                               "An Agent is a special kind of Participant")
+//  24. IServicesArchitecture          (§6.4.19)  stereotype, extends UML::Collaboration
+//  25. IServiceCollaboration          (§6.4.5)   stereotype, extends UML::Collaboration
+//                                               (interface name disambiguated from the future @amlhubs/uml
+//                                                ICollaboration export by the "Service" prefix; the SoaML
+//                                                §6.4.5 stereotype's runtime metaClass discriminator remains
+//                                                'Collaboration' per the SoaMLProfile.xmi <name> element)
+//  26. ISoamlCollaborationUse         (§6.4.6)   stereotype, extends UML::CollaborationUse
+//                                               (interface name disambiguated from the future @amlhubs/uml
+//                                                ICollaborationUse export by the "Soaml" prefix; the runtime
+//                                                metaClass discriminator remains 'CollaborationUse' per the
+//                                                SoaMLProfile.xmi <name> element)
+//  27. ISoamlPort                     (§6.4.11)  stereotype, extends UML::Port
+//                                               (interface name disambiguated from the future @amlhubs/uml
+//                                                IPort export by the "Soaml" prefix; the runtime metaClass
+//                                                discriminator remains 'Port' per the SoaMLProfile.xmi
+//                                                <name> element)
+//  28. IMilestone                     (§6.4.9)   stereotype, extends UML::Comment
+
+// --- 22. IParticipant (§6.4.10) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §6.4.10
+ * @metaclass concrete (profile stereotype)
+ * @generalization extends UML::Class
+ * @definition A participant is the type of a provider and/or consumer of
+ *   services. In the business domain a participant may be a person,
+ *   organization, or system. In the systems domain a participant may be a
+ *   system, application, or component. A Participant represents some
+ *   (possibly concrete) party or component that provides and/or consumes
+ *   services (participants may represent people, organizations, or systems
+ *   that provide and/or use services). A Participant is a service provider
+ *   if it offers a service. A Participant is a service consumer if it uses a
+ *   service. A participant may provide or consume any number of services.
+ *   Service consumer and provider are roles Participants play: the role of
+ *   providers in some services and consumers in others, depending on the
+ *   capabilities they provide and the needs they have to carry out their
+ *   capabilities. Since most consumers and providers have both services and
+ *   requests, Participant is used to model both. Participants have ports.
+ *   These ports may use the "Service" and "Request" stereotypes that are the
+ *   interaction points where services are offered or consumed respectively.
+ *   Internally a participant may specify a behavior, a business process, or
+ *   a more granular service contract as a Participant Architecture. A
+ *   concrete Participant may participate in and/or adhere to any number of
+ *   services architectures. A composite structure is generally used to
+ *   define the concrete sub-components of the participant.
+ * @ownedAttributes
+ *   (none — "Attributes: No additional attributes")
+ * @associationEnds
+ *   base_Class : Class [1] -- the UML Class decorated by this Participant stereotype
+ * @operations
+ *   (none declared in §6.4.10)
+ * @constraints
+ *   [1]: A Participant cannot realize or use Interfaces directly; it must do
+ *     so through service ports, which may be Service or Request.
+ *   [2]: Note that the technology implementation of a component implementing
+ *     a participant is not bound by the above rule in the case of it's
+ *     internal technology implementation, the connections to a participant
+ *     components "container" and other implementation components may or may
+ *     not use services.
+ */
+export interface IParticipant extends IClass {
+  readonly baseClassId: string;
+}
+
+// --- 23. IAgent (§6.4.1) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §6.4.1
+ * @metaclass concrete (profile stereotype)
+ * @generalization generalizes IParticipant — per §6.4.1 ("Generalizes:
+ *   Participant") and the SoaMLProfile.xmi packagedElement
+ *   xmi:id='SoaML-Agent' which carries a <generalization> element whose
+ *   <general xmi:idref='SoaML-Participant'/> binds the Agent stereotype to
+ *   Participant. The SoaML metamodel therefore exposes a chained
+ *   Generalization (Agent ↦ Participant ↦ UML::Class); this projection
+ *   captures it via `extends IParticipant` so downstream PRE engine
+ *   reflection can traverse the spine without re-discovering the chain.
+ * @definition An Agent is a classification of autonomous entities that can
+ *   adapt to and interact with their environment. It describes a set of
+ *   agent instances that have features, constraints, and semantics in
+ *   common. Agents in SoaML are also participants, providing and using
+ *   services. In general, agents can be software agents, hardware agents,
+ *   firmware agents, robotic agents, human agents, and so on. Agent extends
+ *   Participant with the ability to be active, participating components of
+ *   a system. They are specialized because they have their own thread of
+ *   control or lifecycle. Another way to think of agents is that they are
+ *   "active participants" in a SOA system. Participants are Components
+ *   whose capabilities and needs are static. In contrast, Agents are
+ *   Participants whose needs and capabilities may change over time. Agents
+ *   possess the capability to have services and Requests and can have
+ *   internal structure and ports. They collaborate and interact with their
+ *   environment. An Agent's classifierBehavior, if any, is treated as its
+ *   life-cycle, or what defines its emergent or adaptive behavior.
+ * @ownedAttributes
+ *   (none — "Attributes: No additional attributes")
+ * @associationEnds
+ *   (none — "Associations: No additional associations"; the base_Class
+ *    association end is inherited from IParticipant via the chained
+ *    Generalization above.)
+ * @operations
+ *   (none declared in §6.4.1)
+ * @constraints
+ *   [1]: The property isActive must always be true.
+ */
+export interface IAgent extends IParticipant {}
+
+// --- 24. IServicesArchitecture (§6.4.19) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §6.4.19
+ * @metaclass concrete (profile stereotype)
+ * @generalization extends UML::Collaboration
+ * @todo upstream-uml — ICollaboration is not yet exported by @amlhubs/uml@^0.0.2;
+ *   the heritage clause is omitted and the underlying UML::Collaboration is
+ *   referenced via baseCollaborationId : string. Adopt `extends ICollaboration`
+ *   when @amlhubs/uml surfaces ICollaboration.
+ * @definition The high-level view of a Service Oriented Architecture that
+ *   defines how a set of participants works together, forming a community,
+ *   for some purpose by providing and using services. A ServicesArchitecture
+ *   (a SOA) describes how participants work together for a purpose by
+ *   providing and using services expressed as service contracts. By
+ *   expressing the use of services, the ServicesArchitecture implies some
+ *   degree of knowledge of the dependencies between the participants in
+ *   some context. Each use of a service in a ServicesArchitecture is
+ *   represented by the use of a ServiceContract bound to the roles of
+ *   participants in that architecture. Note that use of a
+ *   ServicesArchitecture is optional but is recommended to show a high
+ *   level view of how a set of Participants work together for some purpose.
+ *   Where as simple services may not have any dependencies or links to a
+ *   business process, enterprise services can often only be understood in
+ *   context. The services architecture provides that context, and may also
+ *   contain a behavior, which is the business process. The participant's
+ *   roles in a services architecture correspond to the swim lanes or pools
+ *   in a business process. A ServicesArchitecture may be specified
+ *   externally — in a "B2B" type collaboration where there is no
+ *   controlling entity or as the ServicesArchitecture of a participant —
+ *   under the control of a specific entity and/or business process. A "B2B"
+ *   services architecture uses the "ServicesArchitecture" stereotype on a
+ *   collaboration. A Participant may play a role in any number of services
+ *   architecture thereby representing the role a participant plays and the
+ *   requirements that each role places on the participant.
+ * @ownedAttributes
+ *   (none — "Attributes: No new attributes")
+ * @associationEnds
+ *   (none — "Associations: No new associations"; the underlying
+ *    UML::Collaboration is not declared as an explicit base_Collaboration
+ *    ownedAttribute on the SoaML-ServicesArchitecture stereotype because
+ *    ServicesArchitecture specializes the Collaboration stereotype via
+ *    Generalization to SoaML-Collaboration; the ServicesArchitecture
+ *    therefore inherits Collaboration's base_Collaboration end. A
+ *    baseCollaborationId : string is exposed for downstream PRE engine
+ *    reflection until @amlhubs/uml surfaces ICollaboration.)
+ * @operations
+ *   (none declared in §6.4.19)
+ * @constraints
+ *   [1]: The parts of a ServicesArchitecture must be typed by a Participant
+ *     or capability. Each participant satisfying roles in a
+ *     ServicesArchitecture shall have a port for each role binding attached
+ *     to that participant. This port shall have a type compliant with the
+ *     type of the role used in the ServiceContract.
+ */
+export interface IServicesArchitecture {
+  readonly baseCollaborationId: string;
+}
+
+// --- 25. IServiceCollaboration (§6.4.5) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §6.4.5
+ * @metaclass concrete (profile stereotype)
+ * @generalization extends UML::Collaboration
+ * @todo upstream-uml — ICollaboration is not yet exported by @amlhubs/uml@^0.0.2;
+ *   the heritage clause is omitted and the underlying UML::Collaboration is
+ *   referenced via baseCollaborationId : string. Adopt `extends ICollaboration`
+ *   when @amlhubs/uml surfaces ICollaboration.
+ * @naming The TypeScript interface identifier is `IServiceCollaboration` to
+ *   disambiguate from the future @amlhubs/uml `ICollaboration` export. The
+ *   SoaML §6.4.5 stereotype's runtime metaClass discriminator remains
+ *   'Collaboration' per the SoaMLProfile.xmi <name> element on the
+ *   packagedElement xmi:id='SoaML-Collaboration'. Mirrors the same convention
+ *   implementer 2 used for IServiceProperty (§6.4.12).
+ * @definition Collaboration is extended to indicate whether the role to part
+ *   bindings of CollaborationUses typed by a Collaboration are strictly
+ *   enforced or not. A Collaboration, ServiceContract, or
+ *   ServicesArchitecture represents a pattern of interaction between roles.
+ *   This interaction may be informal and loosely defined as in a
+ *   requirements sketch. Or it may represent formal agreements or
+ *   requirements that must be fulfilled exactly. A Collaboration's isStrict
+ *   property establishes the default value of the isStrict property for any
+ *   CollaborationUse typed by the Collaboration. Note that as a
+ *   ServiceContract is binding on the ServiceInterfaces named in that
+ *   contract, a CollaborationUse is not required if the types are
+ *   compatible. A Collaboration may have isStrict=true indicating the
+ *   collaboration represents a formal interaction between its roles that
+ *   all parts playing those roles are intended to follow. If
+ *   isStrict=false, then the collaboration represents an informal pattern
+ *   of interaction that may be used to document the intended interaction
+ *   between parts without specifically requiring parts bound to roles in
+ *   CollaborationUses typed by the collaboration to be compatible. The
+ *   isStrict property of a Collaboration establishes the default value for
+ *   the isStrict property of all CollaborationUses typed by the
+ *   Collaboration. A CollaborationUse may have this value changed to
+ *   address particular situations.
+ * @ownedAttributes
+ *   isStrict : Boolean = true -- Indicates whether this Collaboration is
+ *     intended to represent a strict pattern of interaction. Establishes the
+ *     default value for any CollaborationUse typed by this Collaboration.
+ * @associationEnds
+ *   base_Collaboration : Collaboration [1] -- the UML Collaboration decorated
+ *     by this Collaboration (SoaML §6.4.5) stereotype
+ *     (deferred via baseCollaborationId : string until @amlhubs/uml surfaces
+ *      ICollaboration)
+ * @operations
+ *   (none declared in §6.4.5)
+ * @constraints
+ *   (none — "Constraints: No new constraints")
+ */
+export interface IServiceCollaboration {
+  readonly isStrict: boolean;
+  readonly baseCollaborationId: string;
+}
+
+// --- 26. ISoamlCollaborationUse (§6.4.6) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §6.4.6
+ * @metaclass concrete (profile stereotype)
+ * @generalization extends UML::CollaborationUse
+ * @todo upstream-uml — ICollaborationUse is not yet exported by @amlhubs/uml@^0.0.2;
+ *   the heritage clause is omitted and the underlying UML::CollaborationUse
+ *   is referenced via baseCollaborationUseId : string. Adopt
+ *   `extends ICollaborationUse` when @amlhubs/uml surfaces ICollaborationUse.
+ * @naming The TypeScript interface identifier is `ISoamlCollaborationUse` to
+ *   disambiguate from the future @amlhubs/uml `ICollaborationUse` export.
+ *   The SoaML §6.4.6 stereotype's runtime metaClass discriminator remains
+ *   'CollaborationUse' per the SoaMLProfile.xmi <name> element on the
+ *   packagedElement xmi:id='SoaML-CollaborationUse'.
+ * @definition CollaborationUse is extended to indicate whether the role to
+ *   part bindings are strictly enforced or loose. A CollaborationUse
+ *   explicitly indicates the ability of an owning Classifier to fulfill a
+ *   ServiceContract or adhere to a ServicesArchitecture. A Classifier may
+ *   contain any number of CollaborationUses that indicate what it fulfills.
+ *   The CollaborationUse has roleBindings that indicate what role each part
+ *   in the owning Classifier plays. If the CollaborationUse is strict, then
+ *   the parts must be compatible with the roles they are bound to, and the
+ *   owning Classifier must have behaviors that are behaviorally compatible
+ *   with the ownedBehavior of the CollaborationUse's Collaboration type.
+ *   Note that as a ServiceContract is binding on the ServiceInterfaces
+ *   named in that contract, a CollaborationUse is not required if the
+ *   types are compatible.
+ * @ownedAttributes
+ *   isStrict : Boolean -- Indicates whether this particular fulfillment is
+ *     intended to be strict. A value of true indicates the roleBindings in
+ *     the Fulfillment must be to compatible parts. A value of false
+ *     indicates the modeler warrants the part is capable of playing the
+ *     role even though the type may not be compatible. The default value is
+ *     the value of the isStrict property of Collaboration used as the type
+ *     of the CollaborationUse. (No default declared in the SoaMLProfile.xmi
+ *     <ownedAttribute xmi:id='SoaML-CollaborationUse-isStrict'>; the
+ *     property therefore has unspecified default at the profile level and
+ *     resolves at instantiation to the type's isStrict.)
+ * @associationEnds
+ *   base_CollaborationUse : CollaborationUse [1] -- the UML CollaborationUse
+ *     decorated by this CollaborationUse (SoaML §6.4.6) stereotype
+ *     (deferred via baseCollaborationUseId : string until @amlhubs/uml
+ *      surfaces ICollaborationUse)
+ * @operations
+ *   (none declared in §6.4.6)
+ * @constraints
+ *   (none — "Constraints: No new constraints")
+ * @semanticVariationPoint Compliance between types named as roles in a
+ *   collaboration use is a semantic variation point and will be determined
+ *   by modelers or tools.
+ */
+export interface ISoamlCollaborationUse {
+  readonly isStrict: boolean;
+  readonly baseCollaborationUseId: string;
+}
+
+// --- 27. ISoamlPort (§6.4.11) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §6.4.11
+ * @metaclass concrete (profile stereotype)
+ * @generalization extends UML::Port
+ * @todo upstream-uml — IPort is not yet exported by @amlhubs/uml@^0.0.2;
+ *   the heritage clause is omitted and the underlying UML::Port is
+ *   referenced via basePortId : string. Adopt `extends IPort` when
+ *   @amlhubs/uml surfaces IPort.
+ * @naming The TypeScript interface identifier is `ISoamlPort` to
+ *   disambiguate from the future @amlhubs/uml `IPort` export. The SoaML
+ *   §6.4.11 stereotype's runtime metaClass discriminator remains 'Port' per
+ *   the SoaMLProfile.xmi <name> element on the packagedElement
+ *   xmi:id='SoaML-Port'.
+ * @definition Extends UML Port with a means to indicate whether a
+ *   Connection is required on this Port or not. Port is extended with a
+ *   connectorRequired property to indicate whether a connector is required
+ *   on this port, or the containing classifier may be able to function
+ *   without anything connected. Participants may provide many Services and
+ *   have many Requests. A Participant may be able to function without all
+ *   of its Services being used, and it may be able to function, perhaps
+ *   with reduced qualities of service, without a services connected to all
+ *   of its Requests. The property connectorRequired set to true on a Port
+ *   indicates the Port must be connected to at least one Connector. This is
+ *   used to indicate a Service port that must be used, or a Request port
+ *   that must be satisfied. A Port with connectorRequired set to false
+ *   indicates that no connection is required; the containing Component can
+ *   function without interacting with another Component through that Port.
+ *   More generally, when connectorRequired is set to true, then all
+ *   instances of this Port must have a Connector or ServiceChannel
+ *   connected. This is the default situation, and is the same as UML. If
+ *   connectorRequired is set to false, then this is an indication that the
+ *   containing classifier is able to function, perhaps with different
+ *   qualities of service, or using a different implement, without any
+ *   Connector connected to the part.
+ * @ownedAttributes
+ *   connectorRequired : Boolean [0..1] = true -- Indicates whether a
+ *     connector is required on this Port or not. The default value is true.
+ * @associationEnds
+ *   base_Port : Port [1] -- the UML Port decorated by this Port (SoaML
+ *     §6.4.11) stereotype
+ *     (deferred via basePortId : string until @amlhubs/uml surfaces IPort)
+ * @operations
+ *   (none declared in §6.4.11)
+ * @constraints
+ *   (none — "Constraints: No additional constraints")
+ */
+export interface ISoamlPort {
+  readonly connectorRequired: boolean | undefined;
+  readonly basePortId: string;
+}
+
+// --- 28. IMilestone (§6.4.9) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §6.4.9
+ * @metaclass concrete (profile stereotype)
+ * @generalization extends UML::Comment
+ * @definition A Milestone is a means for depicting progress in behaviors in
+ *   order to analyze liveness. Milestones are particularly useful for
+ *   behaviors that are long lasting or even infinite. A Milestone depicts
+ *   progress by defining a signal that is sent to an abstract observer. The
+ *   signal contains an integer value that intuitively represents the amount
+ *   of progress that has been achieved when passing a point attached to
+ *   this Milestone. Provided that a SoaML specification is available it is
+ *   possible to analyze a service behavior (a Participant or a
+ *   ServiceContract) to determine properties of the progress value. Such
+ *   analysis results could be e.g., that the progress value can never go
+ *   beyond a certain value. This could then be interpreted as a measure of
+ *   the potential worth of the analyzed behaviors. In situations where
+ *   alternative service behaviors are considered as in Agent negotiations,
+ *   such a progress measurement could be a useful criterion for the choice.
+ *   Milestones can also be applied imperatively as specification of tracing
+ *   information in a debugging or monitoring situation. The signal sent
+ *   when the Milestone is encountered may contain arguments that can
+ *   register any current values. Progress values may be interpreted
+ *   ordinally in the sense that a progress value of 4 is higher than a
+ *   progress value of 3. A reasonable interpretation would be that the
+ *   higher the possible progress value, the better. Alternatively the
+ *   progress values may be interpreted nominally as they may represent
+ *   distinct reachable situations. In such a case the analysis would have
+ *   to consider sets of reachable values. It would typically be a
+ *   reasonable interpretation that reaching a superset of values would
+ *   constitute better progress possibilities.
+ * @ownedAttributes
+ *   progress : Integer -- The progress measurement.
+ * @associationEnds
+ *   signal : Signal [0..1] -- A Signal associated with this Milestone.
+ *   value : Expression [*] -- Arguments of the signal when the Milestone is
+ *     reached.
+ *   base_Comment : Comment [1] -- the UML Comment decorated by this
+ *     Milestone stereotype (per SoaMLProfile.xmi <ownedAttribute
+ *     xmi:id='SoaML-Milestone-base_Comment'>)
+ * @operations
+ *   (none declared in §6.4.9)
+ * @constraints
+ *   (none — "Constraints: No new constraints")
+ */
+export interface IMilestone extends IComment {
+  readonly progress: number;
+  readonly signalId: string | undefined;
+  readonly valueIds: ReadonlyArray<string>;
+  readonly baseCommentId: string;
 }
 
 // END-SOAML
