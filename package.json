@@ -40,5 +40,8 @@
   "license": "UNLICENSED",
   "peerDependencies": {
     "@amlhubs/uml": "^0.0.2"
+  },
+  "devDependencies": {
+    "@amlhubs/uml": "^0.0.2"
   }
 }

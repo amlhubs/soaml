@@ -722,9 +722,18 @@ export interface IAttachment extends IProperty {
  *   (none declared in §6.4.12)
  * @constraints
  *   (none — "Constraints: No additional constraints")
+ * @note SoaML §6.4.12 declares `isID : Boolean [0..1] = false`. Upstream
+ *   UML `IProperty.isID` is `Boolean [1..1] = false` (UML 2.5.1 §9.5.1 — Property
+ *   inherits `isReadOnly` and ID-companion semantics from MultiplicityElement
+ *   defaults). TypeScript covariance forbids widening a required parent
+ *   property to `boolean | undefined` in the child interface, so this
+ *   implementation surfaces `isID` as `boolean` (with the spec default `false`
+ *   substituting for the optional-and-absent case). XMI serialization MUST
+ *   omit the attribute when the value equals the spec default `false`, which
+ *   restores round-trip equivalence with the `[0..1]` declaration.
  */
 export interface IServiceProperty extends IProperty {
-  readonly isID: boolean | undefined;
+  readonly isID: boolean;
   readonly basePropertyId: string;
 }
 
