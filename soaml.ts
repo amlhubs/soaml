@@ -84,6 +84,8 @@ import type {
  *   (none declared in §6.4.3)
  * @constraints
  *   (none — "Constraints: No additional constraints")
+ * @see IServiceContract — §6.4.3 cites ServiceContract as a specifier of the service a Capability may provide
+ * @see IServiceInterface — §6.4.3 cites ServiceInterface as a specifier of the service a Capability may provide
  */
 export interface ICapability extends IClass {
   readonly baseClassId: string;
@@ -113,6 +115,7 @@ export interface ICapability extends IClass {
  *   (none declared in §6.4.7)
  * @constraints
  *   (none — "Constraints: No additional constraints")
+ * @see ICapability — §6.4.7 cites Capability as the target of an Expose dependency
  */
 export interface IExpose {
   readonly baseDependencyId: string;
@@ -494,6 +497,8 @@ export interface IServiceInterface extends IClass {
  * @constraints
  *   [1]: The type of a Service must be a ServiceInterface or an Interface.
  *   [2]: The direction property of a Service must be incoming.
+ * @see IServiceContract — §6.4.18 cites ServiceContract as the contract a Service is bound by
+ * @see IServiceInterface — §6.4.18 constraint [1] requires the type of a Service to be a ServiceInterface or an Interface
  */
 export interface IService {
   readonly basePortId: string;
@@ -527,6 +532,8 @@ export interface IService {
  * @constraints
  *   [1]: The type of a Request must be a ServiceInterface or an Interface.
  *   [2]: The isConjugated property of a "Request" must be set to true.
+ * @see IService — §6.4.14 contrasts the Request port (consumer side) with the Service port (provider side)
+ * @see IServiceInterface — §6.4.14 constraint [1] requires the type of a Request to be a ServiceInterface or an Interface
  */
 export interface IRequest {
   readonly basePortId: string;
@@ -862,6 +869,7 @@ export interface IParticipant extends IClass {
  *   (none declared in §6.4.1)
  * @constraints
  *   [1]: The property isActive must always be true.
+ * @see IParticipant — §6.4.1 "Generalizes: Participant"; this `@see` reinforces the chained Generalization the heritage clause already encodes
  */
 export interface IAgent extends IParticipant {}
 
@@ -919,6 +927,8 @@ export interface IAgent extends IParticipant {}
  *     ServicesArchitecture shall have a port for each role binding attached
  *     to that participant. This port shall have a type compliant with the
  *     type of the role used in the ServiceContract.
+ * @see IParticipant — §6.4.19 constraint [1] requires the parts of a ServicesArchitecture to be typed by a Participant
+ * @see IServiceContract — §6.4.19 cites ServiceContract as the binding mechanism for each use of a service in the architecture
  */
 export interface IServicesArchitecture {
   readonly baseCollaborationId: string;
@@ -1519,6 +1529,32 @@ export interface IProfileFreeFormDescriptor extends IProperty {
  */
 export interface IProfileFreeFormValue extends IValueSpecification {
   readonly baseValueSpecificationId: string;
+}
+
+// ─── 36. ISoaMLProfile (root, formal/12-05-10) ───────────────────────────────
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §6 (Profile root)
+ * @metaclass concrete
+ * @generalization extends UML::Profile
+ * @definition The SoaML Profile is the OMG-published UML 2 Profile that
+ *   declares the full set of SoaML stereotypes (§6.4.1 through §6.4.19) and
+ *   the Categorization profile stereotypes (§7.3.1 through §7.3.5). User UML
+ *   models apply this Profile to gain Service Oriented Architecture modeling
+ *   semantics.
+ * @ownedAttributes
+ *   (none beyond what UML::Profile declares)
+ * @associationEnds
+ *   ownedStereotype : Stereotype [0..*]
+ * @operations
+ *   (none beyond what UML::Profile declares)
+ * @constraints
+ *   (none additional)
+ */
+export interface ISoaMLProfile {
+  readonly metaClass: 'SoaMLProfile';
+  readonly basePackageId: string; // @todo upstream-uml — UML::Profile not yet exported by @amlhubs/uml
+  readonly ownedStereotypeIds: ReadonlyArray<string>;
 }
 
 // END-SOAML
