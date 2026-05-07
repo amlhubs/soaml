@@ -1144,4 +1144,381 @@ export interface IMilestone extends IComment {
   readonly baseCommentId: string;
 }
 
+// ─── Cluster 4 — Categorization profile stereotypes (§7.3) ───────────────
+// Population:
+//  29. IProfileCatalog                 (§7.3.1)   stereotype, decorates UML::Package
+//                                                 (profile-tier projection of Cluster 1's metamodel-tier
+//                                                  ICatalog; the `Profile` prefix prevents TypeScript
+//                                                  identifier collision with Cluster 1's bare ICatalog;
+//                                                  runtime metaClass discriminator remains 'Catalog' per
+//                                                  the SoaMLProfile.xmi <name>Catalog</name> element on
+//                                                  packagedElement xmi:id='SoaML-Catalog')
+//  30. IProfileCategorization          (§7.3.2)   stereotype, decorates UML::Dependency
+//                                                 (profile-tier projection of Cluster 1's metamodel-tier
+//                                                  ICategorization; runtime metaClass discriminator remains
+//                                                  'Categorization' per SoaMLProfile.xmi packagedElement
+//                                                  xmi:id='SoaML-Categorization' <name>Categorization</name>)
+//  31. IProfileCategory                (§7.3.3)   stereotype, decorates UML::Artifact via NodeDescriptor
+//                                                 (profile-tier projection of Cluster 1's metamodel-tier
+//                                                  ICategory; runtime metaClass discriminator remains
+//                                                  'Category' per SoaMLProfile.xmi packagedElement
+//                                                  xmi:id='SoaML-Category' <name>Category</name>)
+//  32. IProfileCategoryValue           (§7.3.4)   stereotype, decorates UML::ValueSpecification via FreeFormValue
+//                                                 (profile-tier projection of Cluster 1's metamodel-tier
+//                                                  ICategoryValue; runtime metaClass discriminator remains
+//                                                  'CategoryValue' per SoaMLProfile.xmi packagedElement
+//                                                  xmi:id='SoaML-CategoryValue' <name>CategoryValue</name>)
+//  33. IProfileNodeDescriptor          (§7.3.5)   stereotype (RAS placeholder), decorates UML::Artifact
+//                                                 (profile-tier projection of Cluster 1's metamodel-tier
+//                                                  INodeDescriptor; runtime metaClass discriminator remains
+//                                                  'NodeDescriptor' per SoaMLProfile.xmi packagedElement
+//                                                  xmi:id='SoaML-NodeDescriptor' <name>NodeDescriptor</name>)
+//  34. IProfileFreeFormDescriptor      (§7.3.5)   stereotype (RAS placeholder), decorates UML::Property
+//                                                 (profile-tier projection of Cluster 1's metamodel-tier
+//                                                  IFreeFormDescriptor; runtime metaClass discriminator
+//                                                  remains 'FreeFormDescriptor' per SoaMLProfile.xmi
+//                                                  packagedElement xmi:id='SoaML-FreeFormDescriptor'
+//                                                  <name>FreeFormDescriptor</name>)
+//  35. IProfileFreeFormValue           (§7.3.5)   stereotype (RAS placeholder), decorates UML::ValueSpecification
+//                                                 (profile-tier projection of Cluster 1's metamodel-tier
+//                                                  IFreeFormValue; runtime metaClass discriminator remains
+//                                                  'FreeFormValue' per SoaMLProfile.xmi packagedElement
+//                                                  xmi:id='SoaML-FreeFormValue' <name>FreeFormValue</name>)
+
+// --- 29. IProfileCatalog (§7.3.1) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §7.3.1
+ * @metaclass concrete (profile stereotype)
+ * @profileSource SoaMLProfile.xmi packagedElement xmi:id='SoaML-Catalog'
+ *   <name>Catalog</name>; <generalization><general xmi:idref='SoaML-NodeDescriptor'/></generalization>;
+ *   <ownedAttribute xmi:id='SoaML-Catalog-base_Package'> with type
+ *   href='http://www.omg.org/spec/UML/20090901/UML.xmi#Package'.
+ * @runtimeMetaClass 'Catalog'
+ * @generalization decorates UML::Package; specializes IProfileNodeDescriptor
+ *   (the spec PDF prints "NoteDescriptor" in §7.3.1 — preserved here as
+ *    "NodeDescriptor" to match §7.3.5 RAS Placeholder spelling and the
+ *    SoaMLProfile.xmi <general xmi:idref='SoaML-NodeDescriptor'/> reference)
+ * @definition Provides a means of classifying and organizing elements by
+ *   categories for any purpose. A named collection of related elements,
+ *   including other catalogs characterized by a specific set of categories.
+ *   Applying a Category to an Element using a Categorization places that
+ *   Element in the Catalog. Catalog is a RAS DescriptorGroup containing
+ *   other Catalogs and/or Categories providing the mapping to RAS
+ *   classification.
+ * @ownedAttributes
+ *   (none — "Attributes: No additional attributes")
+ * @associationEnds
+ *   base_Package : Package [1] -- the UML Package decorated by this Catalog
+ *     stereotype (per SoaMLProfile.xmi <ownedAttribute
+ *     xmi:id='SoaML-Catalog-base_Package'>)
+ * @operations
+ *   (none declared in §7.3.1)
+ * @constraints
+ *   [1]: Catalogs can only contain Categories, CategoryValues, or other
+ *     Catalogs.
+ * @semantics When a model Element is categorized with a Category or
+ *   CategoryValue, it is effectively placed in the Catalog that contains
+ *   that Category. In the case of classification by a CategoryValue, the
+ *   Category is the classifier of the CategoryValue. The meaning of being
+ *   categorized by a Category, and therefore placed in a Catalog is not
+ *   specified by this specification. It can mean whatever the modeler
+ *   wishes. That meaning might be suggested by the catalog and category
+ *   name, the category's attributes, and a category value's attribute
+ *   values. The same model element can be categorized many ways. The same
+ *   category or category value may be used to categorize many model
+ *   elements.
+ * @notation The notation is a Package stereotyped as "Catalog." Tool
+ *   vendors are encouraged to provide views and queries that show elements
+ *   organized in catalog hierarchies based on how they are categorized.
+ */
+export interface IProfileCatalog extends IPackage {
+  readonly basePackageId: string;
+}
+
+// --- 30. IProfileCategorization (§7.3.2) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §7.3.2
+ * @metaclass concrete (profile stereotype)
+ * @profileSource SoaMLProfile.xmi packagedElement
+ *   xmi:id='SoaML-Categorization' <name>Categorization</name>;
+ *   <ownedAttribute xmi:id='SoaML-Categorization-base_Dependency'> with
+ *   type href='http://www.omg.org/spec/UML/20090901/UML.xmi#Dependency'.
+ *   The Extension association is xmi:id='SoaML-Dependency_Categorization'.
+ * @runtimeMetaClass 'Categorization'
+ * @generalization decorates UML::Dependency
+ * @todo upstream-uml — IDependency is not yet exported by @amlhubs/uml@^0.0.2;
+ *   the heritage clause is omitted and the underlying UML::Dependency is
+ *   referenced via baseDependencyId : string. Adopt `extends IDependency`
+ *   when @amlhubs/uml surfaces IDependency.
+ * @definition Used to categorize an Element by a Category or CategoryValue.
+ *   Categorization connects an Element to a Category or CategoryValue in
+ *   order to categorize or classify that element. The Element then becomes
+ *   a member of the Catalog that contains that Category. This allows
+ *   Elements to be organized in many hierarchical Catalogs where each
+ *   Catalog is described by a set of Categories. The source is any Element,
+ *   the target is a Category or CategoryValue.
+ * @ownedAttributes
+ *   (none — "Attributes: No additional attributes")
+ * @associationEnds
+ *   base_Dependency : Dependency [1] -- the UML Dependency decorated by
+ *     this Categorization stereotype (per SoaMLProfile.xmi <ownedAttribute
+ *     xmi:id='SoaML-Categorization-base_Dependency'>)
+ * @operations
+ *   (none declared in §7.3.2)
+ * @constraints
+ *   [1]: The target of a Categorization must be either a Category or
+ *     CategoryValue.
+ * @semantics The primary purpose of Category is to be able to provide
+ *   information that characterizes an element by some domain of interest.
+ *   Categorizing an element characterizes that element with that Category.
+ *   What this means is derived from the meaning of the Category. The
+ *   meaning of a Category is defined by its name, owned attributes, or
+ *   constraints if any. Categorization of an element may be used to provide
+ *   multiple orthogonal ways of organizing elements. UML currently provides
+ *   a single mechanism for organizing model elements as PackagedElements
+ *   in a Package. This is useful for namespace management and any other
+ *   situations where it is necessary for an element to be in one and only
+ *   one container at a time. But it is insufficient for organization
+ *   across many different dimensions since a PackageableElement can only
+ *   be contained in one Package. For example, model elements might also
+ *   need to be organized by owner, location, cost gradient, time of
+ *   production, status, portfolio, architectural layer, Web, tiers in an
+ *   n-tiered application, physical boundary, service partitions, etc.
+ *   Different classification hierarchies and Categories may be used to
+ *   capture these concerns and be applied to elements to indicate
+ *   orthogonal organizational strategies.
+ * @notation A Category or CategoryValue may be applied to an Element
+ *   Categorization that may be represented as a Dependency with the
+ *   "Categorization" stereotype.
+ * @changesToUml21 No changes to UML 2.1
+ */
+export interface IProfileCategorization {
+  readonly baseDependencyId: string;
+}
+
+// --- 31. IProfileCategory (§7.3.3) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §7.3.3
+ * @metaclass concrete (profile stereotype)
+ * @profileSource SoaMLProfile.xmi packagedElement xmi:id='SoaML-Category'
+ *   <name>Category</name>; <generalization><general
+ *   xmi:idref='SoaML-NodeDescriptor'/></generalization>. Category carries
+ *   no <ownedAttribute> elements directly — the base_Artifact decoration
+ *   is inherited transitively from NodeDescriptor (see IProfileNodeDescriptor).
+ * @runtimeMetaClass 'Category'
+ * @generalization specializes IProfileNodeDescriptor; transitively decorates
+ *   UML::Artifact (per the spec §7.3.3 "Generalizations: NodeDescriptor"
+ *   clause and §7.3.5 "NodeDescriptor extends Artifact" RAS placeholder)
+ * @definition A classification or division used to characterize the
+ *   elements of a catalog and to categorize model elements. A Category is
+ *   a piece of information about an element. A Category has a name
+ *   indicating what the information is about, and a set of attributes and
+ *   constraints that characterize the Category. An Element may have many
+ *   Categories, and the same Category can be applied to many Elements.
+ *   Categories may be organized into Catalogs hierarchies.
+ * @ownedAttributes
+ *   (none — "Attributes: No additional attributes")
+ * @associationEnds
+ *   (inherited from IProfileNodeDescriptor — base_Artifact)
+ * @operations
+ *   (none declared in §7.3.3)
+ * @constraints
+ *   [1]: A Category must be contained in a Catalog.
+ * @semantics The meaning of a Category is not specified by SoaML. Instead
+ *   it may be interpreted by the modeler, viewer of the model, or any
+ *   other user for any purpose they wish. For example a Catalog hiearachy
+ *   of Categories could be used to indicate shared characteristics used
+ *   to group species. In this case the categorization might imply
+ *   inheritance and the principle of common descent. Other categorizations
+ *   could represent some other taxonomy such as ownership. In this case,
+ *   the term categorization is intended to mean describing the
+ *   characteristics of something, not necessarily an inheritance hierarchy.
+ *   All instances having categorized by a Category have the characteristics
+ *   of that Category. The characteristics of a Category are described by
+ *   its attributes and constraints. ClassifierValues may be used to
+ *   provide specific values for these attributes in order to more
+ *   specifically categorize an element. A Category may have ownedRules
+ *   representing Constraints that further characterize the category. The
+ *   meaning of these constraints when an element is categorized by a
+ *   Category is not specified.
+ * @notation The notation is an Artifact stereotyped as "Category."
+ */
+export interface IProfileCategory extends IProfileNodeDescriptor {
+}
+
+// --- 32. IProfileCategoryValue (§7.3.4) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §7.3.4
+ * @metaclass concrete (profile stereotype)
+ * @profileSource SoaMLProfile.xmi packagedElement
+ *   xmi:id='SoaML-CategoryValue' <name>CategoryValue</name>;
+ *   <generalization><general xmi:idref='SoaML-FreeFormValue'/></generalization>.
+ *   CategoryValue carries no <ownedAttribute> elements directly — the
+ *   base_ValueSpecification decoration is inherited transitively from
+ *   FreeFormValue (see IProfileFreeFormValue).
+ * @runtimeMetaClass 'CategoryValue'
+ * @generalization specializes IProfileFreeFormValue; transitively decorates
+ *   UML::ValueSpecification (per the spec §7.3.4 "Generalizations:
+ *   FreeFormValue" clause and §7.3.5 "FreeFormValue extends
+ *   ValueSpecification" RAS placeholder)
+ * @definition Provides specific values for a Category to further
+ *   categorize model elements. A CategoryValue provides values for the
+ *   attributes of a Category. It may also be used to categorize model
+ *   elements providing detailed information for the category.
+ * @ownedAttributes
+ *   (none — "Attributes: No additional attributes")
+ * @associationEnds
+ *   (inherited from IProfileFreeFormValue — base_ValueSpecification)
+ * @operations
+ *   (none declared in §7.3.4)
+ * @constraints
+ *   [1]: The classifier for a CategoryValue must be a Category.
+ * @semantics The characteristics of a Category are described by its
+ *   attributes and constraints. ClassifierValues may be used to provide
+ *   specific values for these attributes in order to more specifically
+ *   categorize an element. Categorizing an element with a CategoryValue
+ *   categorizes the element by the Category that is the classifier of
+ *   the CategoryValue.
+ * @notation The notation is an InstanceSpecification stereotyped as
+ *   "CategoryValue".
+ */
+export interface IProfileCategoryValue extends IProfileFreeFormValue {
+}
+
+// --- 33. IProfileNodeDescriptor (§7.3.5) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §7.3.5
+ * @metaclass concrete (profile stereotype, RAS placeholder)
+ * @profileSource SoaMLProfile.xmi packagedElement
+ *   xmi:id='SoaML-NodeDescriptor' <name>NodeDescriptor</name>;
+ *   <ownedAttribute xmi:id='SoaML-NodeDescriptor-base_Artifact'> with
+ *   type href='http://www.omg.org/spec/UML/20090901/UML.xmi#Artifact'.
+ *   The Extension association is xmi:id='SoaML-Artifact_DescriptorGroup'.
+ * @runtimeMetaClass 'NodeDescriptor'
+ * @generalization decorates UML::Artifact
+ * @todo upstream-uml — IArtifact is not yet exported by @amlhubs/uml@^0.0.2;
+ *   the heritage clause is omitted and the underlying UML::Artifact is
+ *   referenced via baseArtifactId : string. Adopt `extends IArtifact`
+ *   when @amlhubs/uml surfaces IArtifact.
+ * @definition The following stereotypes represent placeholders for the
+ *   corresponding elements in the OMG Reusable Asset Specification (RAS).
+ *   These placeholders are included to provide SoaML integration with
+ *   RAS. For further details, see the RAS specification
+ *   (http://www.omg.org/spec/RAS/). NodeDescriptor extends Artifact.
+ *   There are some differences between SoaML categorization and RAS:
+ *     - RAS FreeFormValues are contained in a ClassificationSchema and may
+ *       be used individually to classify any asset. SoaML uses Category
+ *       ownedAttributes to define Properties of a Category. These
+ *       Properties are encapsulated in a Category and cannot be used in
+ *       another Category.
+ *     - RAS uses a DescriptorGroup to associate a ClassificationSchema and
+ *       set of FreeFormValues of FreeFormDescriptors from that
+ *       ClassificationSchema to classify an Asset. SoaML uses
+ *       Categorization Dependencies to categorize any model Elements.
+ * @ownedAttributes
+ *   (none declared)
+ * @associationEnds
+ *   base_Artifact : Artifact [1] -- the UML Artifact decorated by this
+ *     NodeDescriptor stereotype (per SoaMLProfile.xmi <ownedAttribute
+ *     xmi:id='SoaML-NodeDescriptor-base_Artifact'>)
+ * @operations
+ *   (none declared in §7.3.5)
+ * @constraints
+ *   (none declared)
+ */
+export interface IProfileNodeDescriptor {
+  readonly baseArtifactId: string;
+}
+
+// --- 34. IProfileFreeFormDescriptor (§7.3.5) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §7.3.5
+ * @metaclass concrete (profile stereotype, RAS placeholder)
+ * @profileSource SoaMLProfile.xmi packagedElement
+ *   xmi:id='SoaML-FreeFormDescriptor' <name>FreeFormDescriptor</name>;
+ *   <ownedAttribute xmi:id='SoaML-FreeFormDescriptor-base_Property'> with
+ *   type href='http://www.omg.org/spec/UML/20090901/UML.xmi#Property'.
+ *   The Extension association is xmi:id='SoaML-Property_FreeFormDescriptor'.
+ * @runtimeMetaClass 'FreeFormDescriptor'
+ * @generalization decorates UML::Property
+ * @definition The following stereotypes represent placeholders for the
+ *   corresponding elements in the OMG Reusable Asset Specification (RAS).
+ *   These placeholders are included to provide SoaML integration with
+ *   RAS. For further details, see the RAS specification
+ *   (http://www.omg.org/spec/RAS/). FreeFormDescriptor extends Property.
+ *   There are some differences between SoaML categorization and RAS:
+ *     - RAS FreeFormValues are contained in a ClassificationSchema and may
+ *       be used individually to classify any asset. SoaML uses Category
+ *       ownedAttributes to define Properties of a Category. These
+ *       Properties are encapsulated in a Category and cannot be used in
+ *       another Category.
+ *     - RAS uses a DescriptorGroup to associate a ClassificationSchema and
+ *       set of FreeFormValues of FreeFormDescriptors from that
+ *       ClassificationSchema to classify an Asset. SoaML uses
+ *       Categorization Dependencies to categorize any model Elements.
+ * @ownedAttributes
+ *   (none declared)
+ * @associationEnds
+ *   base_Property : Property [1] -- the UML Property decorated by this
+ *     FreeFormDescriptor stereotype (per SoaMLProfile.xmi <ownedAttribute
+ *     xmi:id='SoaML-FreeFormDescriptor-base_Property'>)
+ * @operations
+ *   (none declared in §7.3.5)
+ * @constraints
+ *   (none declared)
+ */
+export interface IProfileFreeFormDescriptor extends IProperty {
+  readonly basePropertyId: string;
+}
+
+// --- 35. IProfileFreeFormValue (§7.3.5) ---
+/**
+ * @standard OMG SoaML 1.0.1 -- formal/12-05-10
+ * @section §7.3.5
+ * @metaclass concrete (profile stereotype, RAS placeholder)
+ * @profileSource SoaMLProfile.xmi packagedElement
+ *   xmi:id='SoaML-FreeFormValue' <name>FreeFormValue</name>;
+ *   <ownedAttribute xmi:id='SoaML-FreeFormValue-base_ValueSpecification'>
+ *   with type
+ *   href='http://www.omg.org/spec/UML/20090901/UML.xmi#ValueSpecification'.
+ *   The Extension association is xmi:id='SoaML-ValueSpecification_FreeFormValue'.
+ * @runtimeMetaClass 'FreeFormValue'
+ * @generalization decorates UML::ValueSpecification
+ * @definition The following stereotypes represent placeholders for the
+ *   corresponding elements in the OMG Reusable Asset Specification (RAS).
+ *   These placeholders are included to provide SoaML integration with
+ *   RAS. For further details, see the RAS specification
+ *   (http://www.omg.org/spec/RAS/). FreeFormValue extends ValueSpecification.
+ *   There are some differences between SoaML categorization and RAS:
+ *     - RAS FreeFormValues are contained in a ClassificationSchema and may
+ *       be used individually to classify any asset. SoaML uses Category
+ *       ownedAttributes to define Properties of a Category. These
+ *       Properties are encapsulated in a Category and cannot be used in
+ *       another Category.
+ *     - RAS uses a DescriptorGroup to associate a ClassificationSchema and
+ *       set of FreeFormValues of FreeFormDescriptors from that
+ *       ClassificationSchema to classify an Asset. SoaML uses
+ *       Categorization Dependencies to categorize any model Elements.
+ * @ownedAttributes
+ *   (none declared)
+ * @associationEnds
+ *   base_ValueSpecification : ValueSpecification [1] -- the UML
+ *     ValueSpecification decorated by this FreeFormValue stereotype (per
+ *     SoaMLProfile.xmi <ownedAttribute
+ *     xmi:id='SoaML-FreeFormValue-base_ValueSpecification'>)
+ * @operations
+ *   (none declared in §7.3.5)
+ * @constraints
+ *   (none declared)
+ */
+export interface IProfileFreeFormValue extends IValueSpecification {
+  readonly baseValueSpecificationId: string;
+}
+
 // END-SOAML
