@@ -1,0 +1,44 @@
+{
+  "name": "@amlhubs/soaml",
+  "version": "0.0.1",
+  "description": "OMG Service oriented architecture Modeling Language (SoaML) 1.0.1 (formal/12-05-10) — extensible base classes and interfaces for the SoaML metaclasses (services, ports, capabilities, agents, service contracts, milestones, and the SoaML profile stereotypes). Built on top of @amlhubs/uml.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc --noEmit -p tsconfig.test.json",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amlhubs/soaml.git",
+    "directory": "."
+  },
+  "keywords": [
+    "soaml",
+    "soa",
+    "service-oriented-architecture",
+    "metamodel",
+    "metaclass",
+    "omg",
+    "model-driven",
+    "agentic-modeling-language",
+    "aml",
+    "agenihub"
+  ],
+  "license": "UNLICENSED",
+  "peerDependencies": {
+    "@amlhubs/uml": "^0.0.2"
+  }
+}
