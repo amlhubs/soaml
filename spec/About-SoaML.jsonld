@@ -1,0 +1,83 @@
+[ {
+  "@id" : "https://purl.org/dc/terms/license",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+}, {
+  "@id" : "https://www.omg.org/spec/SoaML",
+  "@type" : [ "http://www.w3.org/2002/07/owl#NamedIndividual" ],
+  "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : [ {
+    "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/Specification"
+  } ],
+  "https://www.omg.org/techprocess/ab/SpecificationMetadata/category" : [ {
+    "@value" : "modeling"
+  }, {
+    "@value" : "platform"
+  } ],
+  "https://www.omg.org/techprocess/ab/SpecificationMetadata/publicationDate" : [ {
+    "@type" : "http://www.w3.org/2001/XMLSchema#dateTime",
+    "@value" : "2012-05-02T00:00:00-0400"
+  } ],
+  "https://www.omg.org/techprocess/ab/SpecificationMetadata/specificationAbbreviation" : [ {
+    "@value" : "SoaML"
+  } ],
+  "https://www.omg.org/techprocess/ab/SpecificationMetadata/specificationAbstract" : [ {
+    "@value" : "The Service oriented architecture Modeling Language (SoaML) specification provides a metamodel and a UML profile for the specification and design of services within a service-oriented architecture."
+  } ],
+  "https://www.omg.org/techprocess/ab/SpecificationMetadata/specificationTitle" : [ {
+    "@value" : "Service Oriented Architecture Modeling Language"
+  } ],
+  "https://www.omg.org/techprocess/ab/SpecificationMetadata/specificationURL" : [ {
+    "@id" : "https://www.omg.org/spec/SoaML/About-SoaML"
+  } ]
+}, {
+  "@id" : "https://www.omg.org/spec/SoaML/About-SoaML",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Ontology" ],
+  "http://www.w3.org/2000/01/rdf-schema#label" : [ {
+    "@value" : "About the Service Oriented Architecture Modeling Language Specification Version 1.0.1"
+  } ],
+  "http://www.w3.org/2002/07/owl#imports" : [ {
+    "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/"
+  } ],
+  "http://www.w3.org/2002/07/owl#versionIRI" : [ {
+    "@id" : "https://www.omg.org/spec/SoaML/1.0.1/About-SoaML"
+  } ],
+  "http://www.w3.org/2002/07/owl#versionInfo" : [ {
+    "@value" : "Generated on 2026-05-04T19:31:02-0400"
+  } ],
+  "https://purl.org/dc/terms/license" : [ {
+    "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/MITLicense"
+  } ],
+  "https://www.omg.org/techprocess/ab/SpecificationMetadata/creationDate" : [ {
+    "@type" : "http://www.w3.org/2001/XMLSchema#dateTime",
+    "@value" : "2012-05-02T00:00:00-0400"
+  } ],
+  "https://www.omg.org/techprocess/ab/SpecificationMetadata/filename" : [ {
+    "@value" : "About-SoaML"
+  } ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/Specification",
+  "@type" : [ "http://www.w3.org/2002/07/owl#Class" ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/category",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/creationDate",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/filename",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/publicationDate",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/specificationAbbreviation",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/specificationAbstract",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/specificationTitle",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+}, {
+  "@id" : "https://www.omg.org/techprocess/ab/SpecificationMetadata/specificationURL",
+  "@type" : [ "http://www.w3.org/2002/07/owl#AnnotationProperty" ]
+} ]
